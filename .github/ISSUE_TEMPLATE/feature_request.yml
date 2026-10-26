@@ -1,0 +1,26 @@
+name: Feature request
+description: Something you wish zeroxlsx could write.
+title: "[feat] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to produce?
+      description: Describe the spreadsheet, not the API. Screenshots of a mock-up are welcome.
+    validations:
+      required: true
+  - type: textarea
+    id: workaround
+    attributes:
+      label: How do you work around it today?
+      placeholder: I post-process with openpyxl after writing, which defeats the point.
+  - type: checkboxes
+    id: constraints
+    attributes:
+      label: Constraints this feature has to respect
+      options:
+        - label: It can be implemented with the standard library only (no new runtime dependencies).
+          required: true
+        - label: I understand charts / pivot tables are out of scope by design.
+          required: true

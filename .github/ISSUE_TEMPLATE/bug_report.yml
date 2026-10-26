@@ -1,0 +1,57 @@
+name: Bug report
+description: A generated file does not open, or opens differently than expected.
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report.
+
+        **Do not attach a spreadsheet containing real business data.** Reduce the
+        problem to a handful of fabricated rows, or paste the relevant XML part
+        (`unzip -p file.xlsx xl/worksheets/sheet1.xml`).
+  - type: input
+    id: version
+    attributes:
+      label: zeroxlsx version
+      placeholder: 0.1.0
+    validations:
+      required: true
+  - type: input
+    id: python
+    attributes:
+      label: Python version and OS
+      placeholder: 3.12.4 on Ubuntu 24.04
+    validations:
+      required: true
+  - type: input
+    id: viewer
+    attributes:
+      label: What did you open the file with?
+      placeholder: Excel 365 / LibreOffice 24.8 / openpyxl 3.1 / Numbers
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Minimal reproduction
+      description: The smallest script that produces the bad file.
+      render: python
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected vs. actual
+    validations:
+      required: true
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Before submitting
+      options:
+        - label: I removed all real business data from this report.
+          required: true
+        - label: I searched existing issues for the same problem.
+          required: true

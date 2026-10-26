@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Lint
+        run: ruff check src tests examples
+
+      - name: Test
+        run: pytest
+
+      - name: Generate the example workbook and read it back
+        run: |
+          python examples/make_demo.py
+          python - <<'PY'
+          import openpyxl
+          book = openpyxl.load_workbook("examples/demo.xlsx")
+          sheet = book["Summary"]
+          assert sheet["A1"].value == "Quarterly summary"
+          assert sheet["C3"].number_format == "#,##0.00"
+          assert sheet["D7"].value == "=SUM(D3:D6)"
+          assert len(sheet._images) == 1
+          assert "A1:D1" in [str(r) for r in sheet.merged_cells.ranges]
+          print("demo workbook verified:", book.sheetnames)
+          PY
